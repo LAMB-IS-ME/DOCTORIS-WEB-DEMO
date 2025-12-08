@@ -1,0 +1,45 @@
+backend/
+│
+├── app/
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── chat.py
+│   │   ├── files.py
+│   │   └── auth.py
+│   │
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── rag_service.py
+│   │   ├── llm_service.py
+│   │   ├── file_service.py
+│   │   └── db_service.py
+│   │
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── user.py
+│   │   ├── chat_session.py
+│   │   └── message.py
+│   │
+│   ├── schemas/
+│   │   ├── __init__.py
+│   │   ├── chat.py
+│   │   ├── user.py
+│   │   └── rag.py
+│   │
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── security.py
+│   │   └── exceptions.py
+│   │
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   ├── logger.py
+│   │   └── helpers.py
+│   │
+│   └── main.py
+│
+├── tests/
+│   └── __init__.py
+│
+└── requirements.txt
