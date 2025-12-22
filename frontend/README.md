@@ -36,11 +36,32 @@ GEMINI_API_KEY=your-gemini-api-key-here
 
 ### 3. Chạy development server
 
+**Cách 1: Dùng script tiện lợi (khuyến nghị)**
+```powershell
+.\start.ps1
+```
+Script này sẽ:
+- ✅ Tự động cài dependencies nếu chưa có
+- ✅ Tạo `.env.local` nếu chưa có
+- ✅ Dọn dẹp process cũ trên port 3000
+- ✅ Start server
+
+**Cách 2: Dùng npm**
 ```powershell
 npm run dev
 ```
 
-Truy cập: http://localhost:3000
+**Server sẽ chạy tại:** http://localhost:3000
+
+**Dừng server:**
+```powershell
+.\stop.ps1
+# Hoặc: Ctrl+C trong terminal đang chạy
+```
+
+> 💡 **Lưu ý:** Nếu port 3000 đã bị chiếm, Vite sẽ tự động chọn port khác (vd: 3001, 5173). Kiểm tra terminal output để biết port chính xác.
+
+> 🔧 **Fix port cố định:** File `vite.config.ts` đã được cấu hình để ưu tiên port 3000.
 
 ### 4. Build production
 
@@ -95,6 +116,22 @@ Trong n8n:
 
 ## 🐛 Troubleshooting
 
+### "Server chạy port 5173 thay vì 3000"
+**Nguyên nhân:** Port 3000 đang bị chiếm bởi process khác.
+
+**Fix:**
+```powershell
+# Dừng tất cả process node
+Get-Process -Name node | Stop-Process -Force
+
+# Hoặc tìm và kill process trên port 3000
+netstat -ano | findstr :3000
+# Sau đó: taskkill /PID <PID> /F
+
+# Chạy lại
+npm run dev
+```
+
 ### "No prompt specified"
 → Kiểm tra AI Agent Prompt dùng `{{ $json.body.message }}`
 
@@ -104,17 +141,22 @@ Trong n8n:
 ### Không kết nối n8n
 → Chạy `.\test-webhook.ps1`, kiểm tra `.env.local`
 
+### "Cannot find module vite"
+→ Chạy `npm install` để cài đặt dependencies
+
 ---
 
 ## 📂 Files quan trọng
 
+- `start.ps1` / `stop.ps1` - Scripts tiện lợi start/stop server 🚀
+- `vite.config.ts` - Vite config (port 3000) ✅
 - `services/geminiService.ts` - API call + smart parsing ✅
 - `components/ResultCard.tsx` - Markdown rendering ✅
 - `components/SearchBar.tsx` - Input validation ✅
 - `.env.local` - Environment config ✅
 - `N8N_CONFIG_GUIDE.md` - Hướng dẫn cấu hình n8n ✅
 - `OUTPUT_FORMAT_GUIDE.md` - Hướng dẫn format output markdown ✨
-- `test-webhook.ps1` - Test script ✅
+- `test-webhook.ps1` - Test webhook script ✅
 
 ---
 
