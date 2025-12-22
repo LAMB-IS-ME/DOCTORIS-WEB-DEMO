@@ -13,6 +13,9 @@ interface SearchBarProps {
   isLoading: boolean;
 }
 
+const MAX_QUERY_LENGTH = 6000; // ~1500 tokens
+const WARNING_THRESHOLD = 5000; // Cảnh báo khi gần đạt giới hạn
+
 const SearchBar: React.FC<SearchBarProps> = ({
   query,
   setQuery,
@@ -26,6 +29,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isNearLimit = query.length >= WARNING_THRESHOLD;
+  const isOverLimit = query.length > MAX_QUERY_LENGTH;
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    // Cho phép người dùng nhập nhưng cảnh báo nếu quá dài
+    if (newValue.length <= MAX_QUERY_LENGTH) {
+      setQuery(newValue);
+    }
+  };
 
   const handleClearClick = () => {
     onClear();
@@ -123,8 +137,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className={`block w-full pl-12 pr-32 py-4 text-lg text-slate-900 bg-transparent placeholder-slate-400 focus:outline-none rounded-xl ${image ? 'pt-2 pb-10' : ''}`}
+          onChange={handleQueryChange}
+          maxLength={MAX_QUERY_LENGTH}
+          className={`block w-full pl-12 pr-32 py-4 text-lg text-slate-900 bg-transparent placeholder-slate-400 focus:outline-none rounded-xl ${image ? 'pt-2 pb-10' : ''} ${isNearLimit ? 'border-orange-300' : ''}`}
           placeholder={
             searchType === SearchType.DRUG ? "Nhập tên thuốc, hoạt chất..." : 
             searchType === SearchType.DISEASE ? "Nhập tên bệnh..." : 
@@ -192,6 +207,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
           </button>
         </div>
       </form>
+
+      {/* Character count and warning */}
+      {query.length > 0 && (
+        <div className={`mt-2 text-xs text-right transition-colors ${
+          isNearLimit ? 'text-orange-600 font-medium' : 'text-slate-400'
+        }`}>
+          {query.length} / {MAX_QUERY_LENGTH} ký tự
+          {isNearLimit && ' ⚠️ Gần đạt giới hạn'}
+        </div>
+      )}
     </div>
   );
 };

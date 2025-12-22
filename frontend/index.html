@@ -2,17 +2,14 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doctoris- Chatbot Tra cứu Y khoa</title>
+    <title>Doctoris - Trợ lý Y khoa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            },
             colors: {
               medical: {
                 50: '#f0f9ff',
@@ -32,38 +29,30 @@
       }
     </script>
     <style>
-      body {
-        background-color: #f8fafc;
+      @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
-      /* Custom scrollbar for webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-      ::-webkit-scrollbar-track {
-        background: #f1f5f9; 
+      .animate-fade-in {
+        animation: fade-in 0.3s ease-in;
       }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
+      .animate-fade-in-up {
+        animation: fade-in-up 0.5s ease-out;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+  </head>
   <body>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>

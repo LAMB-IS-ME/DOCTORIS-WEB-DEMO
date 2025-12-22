@@ -14,7 +14,6 @@ const App: React.FC = () => {
   const [result, setResult] = useState<MedicalData | null>(null);
   const [error, setError] = useState<string | null>(null);
   
-  // Update state to use SearchHistoryItem interface
   const [history, setHistory] = useState<SearchHistoryItem[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
@@ -28,7 +27,6 @@ const App: React.FC = () => {
     setError(null);
     setResult(null);
 
-    // Save detailed history item
     if (query.trim()) {
       const newItem: SearchHistoryItem = {
         id: Date.now().toString(),
@@ -38,9 +36,8 @@ const App: React.FC = () => {
       };
       
       setHistory(prev => {
-        // Remove duplicates based on query
         const filtered = prev.filter(item => item.query.toLowerCase() !== newItem.query.toLowerCase());
-        return [newItem, ...filtered].slice(0, 50); // Keep last 50 items
+        return [newItem, ...filtered].slice(0, 50);
       });
     }
 
@@ -51,7 +48,6 @@ const App: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Có lỗi xảy ra');
     } finally {
       setIsLoading(false);
-      // Scroll to result on mobile if needed, or just standard behavior
       setTimeout(() => {
         if (result || error) {
           scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -70,15 +66,7 @@ const App: React.FC = () => {
   const handleHistorySelect = (item: SearchHistoryItem) => {
     setQuery(item.query);
     setSearchType(item.type);
-    setImage(null); // History currently only supports text queries logic for restoration
-    // Auto trigger search
-    setTimeout(() => {
-        // We trigger search manually
-        // Note: In a real app we might want to refactor search logic to accept params directly
-        // For now, we set state and let the user press search or we can mock the event
-        // But better UX: Set state and maybe auto-submit? 
-        // Let's just fill the form for the user to review.
-    }, 0);
+    setImage(null);
   };
 
   return (
@@ -87,7 +75,6 @@ const App: React.FC = () => {
       <header className="bg-white shadow-sm border-b border-slate-200 z-50 flex-none h-16">
         <div className="w-full px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="lg:hidden p-2 -ml-2 text-slate-500 hover:text-medical-600 hover:bg-slate-100 rounded-md"
@@ -115,10 +102,8 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Layout: Sidebar + Content */}
+      {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden relative">
-        
-        {/* Sidebar */}
         <Sidebar 
           history={history}
           onSelect={handleHistorySelect}
@@ -127,11 +112,9 @@ const App: React.FC = () => {
           onClose={() => setIsSidebarOpen(false)}
         />
 
-        {/* Content Area */}
         <main className="flex-1 overflow-y-auto bg-slate-50/50 w-full relative scroll-smooth">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
             
-            {/* Search Section */}
             <div className={`transition-all duration-500 ease-in-out ${result ? '' : 'mt-[5vh] lg:mt-[10vh]'}`}>
               {!result && !isLoading && (
                 <div className="text-center mb-8 animate-fade-in">
@@ -157,7 +140,6 @@ const App: React.FC = () => {
               />
             </div>
 
-            {/* Results Area */}
             <div ref={scrollRef} className="pb-10 min-h-[400px]">
               {isLoading && <LoadingSpinner />}
               
@@ -170,7 +152,7 @@ const App: React.FC = () => {
                    </div>
                    <h3 className="text-xl font-bold text-red-800 mb-2">Đã xảy ra lỗi</h3>
                    <p className="text-red-600 mb-4">{error}</p>
-                   <button onClick={(e) => handleSearch(e)} className="px-4 py-2 bg-white border border-red-300 text-red-700 rounded-lg hover:bg-red-50 font-medium">
+                   <button onClick={handleSearch} className="px-4 py-2 bg-white border border-red-300 text-red-700 rounded-lg hover:bg-red-50 font-medium">
                      Thử lại
                    </button>
                 </div>
@@ -179,7 +161,6 @@ const App: React.FC = () => {
               {result && !isLoading && <ResultCard data={result} />}
             </div>
             
-            {/* Footer */}
             {!result && !isLoading && (
               <footer className="py-6 text-center text-slate-400 text-sm mt-auto">
                 <p>© 2024 Doctoris. Hỗ trợ chuyên môn cho bác sĩ.</p>

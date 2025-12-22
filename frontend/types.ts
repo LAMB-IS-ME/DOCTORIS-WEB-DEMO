@@ -17,7 +17,7 @@ export interface Reference {
 
 export interface MedicalData {
   title: string;
-  category: string; // e.g., "Bệnh lý truyền nhiễm", "Thuốc kháng sinh"
+  category: string;
   summary: string;
   sections: Section[];
   warnings: string[];
